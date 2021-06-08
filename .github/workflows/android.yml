@@ -26,5 +26,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v2.2.3
       with:
-       name: MyApp
-       path: app/build/outputs/apk/debug/paypaycodechallenge-debug.apk
+       name: app
+       path: app/paypaycodechallenge-debug.apk
