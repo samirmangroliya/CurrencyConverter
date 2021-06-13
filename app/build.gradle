@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.samir.paypaycodechallenge"
-        minSdkVersion 16
+        minSdkVersion 22
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
@@ -43,4 +42,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    // Retrofit:  Used for API call/https request
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$log_interceptor_version"
 }
