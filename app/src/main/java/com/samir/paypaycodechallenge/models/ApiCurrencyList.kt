@@ -3,13 +3,7 @@ package com.samir.paypaycodechallenge.models
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
 
-class ApiCurrencyList {
-    @SerializedName("success")
-    val success: Boolean = false
-
-    @SerializedName("info")
-    var info: String = ""
-
+class ApiCurrencyList : BaseResponse() {
     @SerializedName("currencies")
-    val jsonObject: JsonObject? = null
+    val jsonObjectCurrencies: JsonObject? = null
 }

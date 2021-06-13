@@ -1,6 +1,6 @@
-package com.backbase.assignment.restapicall
+package com.samir.paypaycodechallenge.restapicall
 
-import com.backbase.assignment.globaldata.GlobalConstant
+import com.samir.paypaycodechallenge.globaldata.GlobalConstant
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

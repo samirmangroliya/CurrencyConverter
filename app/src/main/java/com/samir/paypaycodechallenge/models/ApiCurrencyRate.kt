@@ -1,7 +1,12 @@
 package com.samir.paypaycodechallenge.models
 
-class ApiCurrencyRate {
-/*    @SerializedName("genres")
-    val genres: List<Genre?>? = null*/
+import com.google.gson.JsonObject
+import com.google.gson.annotations.SerializedName
 
+class ApiCurrencyRate : BaseResponse() {
+    @SerializedName("timestamp")
+    val timestamp: Long? = null
+
+    @SerializedName("quotes")
+    val jsonObjectQuotes: JsonObject? = null
 }

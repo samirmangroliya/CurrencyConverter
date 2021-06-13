@@ -1,37 +1,59 @@
 package com.samir.paypaycodechallenge.restapicall
 
 import androidx.lifecycle.MutableLiveData
-import com.backbase.assignment.globaldata.GlobalConstant
-import com.backbase.assignment.restapicall.RetrofitClient
+import com.samir.paypaycodechallenge.globaldata.GlobalConstant
 import com.samir.paypaycodechallenge.models.ApiCurrencyList
+import com.samir.paypaycodechallenge.models.ApiCurrencyRate
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 object ApiHelper {
-
-    private var mLiveDataCurrencyList: MutableLiveData<ApiCurrencyList?>? = null
-
-    fun getCurrencyList(): MutableLiveData<ApiCurrencyList?>? {
+    fun getCurrencyList(): MutableLiveData<ApiCurrencyList?> {
+        val mLiveDataCurrencyList: MutableLiveData<ApiCurrencyList?> = MutableLiveData<ApiCurrencyList?>()
         try {
-            val call = RetrofitClient.apiInterface.getCurrencyList(GlobalConstant.ACCESS_KEY);
+            val call = RetrofitClient.apiInterface.getCurrencyList(GlobalConstant.ACCESS_KEY)
             call?.enqueue(object : Callback<ApiCurrencyList?> {
                 override fun onResponse(call: Call<ApiCurrencyList?>, response: Response<ApiCurrencyList?>) {
                     response.body()?.let {
-                        mLiveDataCurrencyList?.postValue(it)
+                        mLiveDataCurrencyList.postValue(it)
                     }
                 }
 
                 override fun onFailure(call: Call<ApiCurrencyList?>, t: Throwable) {
-                    var apiCurrencyList = ApiCurrencyList()
-                    apiCurrencyList.info = t.localizedMessage
-                    mLiveDataCurrencyList?.postValue(apiCurrencyList)
+                    val apiCurrencyList = ApiCurrencyList()
+                    t.localizedMessage?.let { apiCurrencyList.error?.info = it }
+                    mLiveDataCurrencyList.postValue(apiCurrencyList)
                 }
             })
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return null
+        return mLiveDataCurrencyList
+    }
+
+    fun getCurrencyRates(): MutableLiveData<ApiCurrencyRate?> {
+        val mLiveDataCurrencyRate: MutableLiveData<ApiCurrencyRate?> = MutableLiveData<ApiCurrencyRate?>()
+        try {
+            val call = RetrofitClient.apiInterface.getCurrencyRates(GlobalConstant.ACCESS_KEY)
+            call?.enqueue(object : Callback<ApiCurrencyRate?> {
+                override fun onResponse(call: Call<ApiCurrencyRate?>, response: Response<ApiCurrencyRate?>) {
+                    response.body()?.let {
+                        mLiveDataCurrencyRate.postValue(it)
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiCurrencyRate?>, t: Throwable) {
+                    val apiCurrencyList = ApiCurrencyRate()
+                    t.localizedMessage?.let { apiCurrencyList.error?.info = it }
+                    mLiveDataCurrencyRate.postValue(apiCurrencyList)
+                }
+            })
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return mLiveDataCurrencyRate
     }
 }

@@ -1,4 +1,4 @@
-package com.backbase.assignment.globaldata
+package com.samir.paypaycodechallenge.globaldata
 
 internal object GlobalConstant {
     const val BASE_URL = "http://api.currencylayer.com/"
