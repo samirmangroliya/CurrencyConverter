@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonObject
 import com.samir.paypaycodechallenge.R
+import com.samir.paypaycodechallenge.globaldata.CurrencyUtil
 import com.samir.paypaycodechallenge.models.Currency
-import java.text.DecimalFormat
 
 class RatesAdapter(
     private val selectedCurrency: Currency,
@@ -18,8 +18,6 @@ class RatesAdapter(
     private val jsonObjectRate: JsonObject?
 ) :
     RecyclerView.Adapter<RatesAdapter.ViewHolder>() {
-
-    val decimalFormat: DecimalFormat = DecimalFormat("#.##")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -61,18 +59,9 @@ class RatesAdapter(
                     if (currAbbrUSD == selectedAbbrUSD) {
                         tvRate.text = "1"
                     } else {
-                        var rate = 1.83 // by default rate if its not found from api
-                        if (currUSDRate != null && selectedUSDRate != null) {
-                            rate = currUSDRate / selectedUSDRate
-                        } else if (selectedUSDRate != null) {
-                            rate = selectedUSDRate * 2
-                        } else if (currUSDRate != null) {
-                            rate = currUSDRate * 2
-                        }
-
-                        val finalAmount = rate * amount
-                        Log.d("Currency Final:: ", "FinalRate >> $finalAmount")
-                        tvRate.text = decimalFormat.format(finalAmount)
+                        val rate = CurrencyUtil().currencyConverter(currUSDRate, selectedUSDRate, amount)
+                        Log.d("Currency Final:: ", "FinalRate >> $rate")
+                        tvRate.text = "$rate"
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

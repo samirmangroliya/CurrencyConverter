@@ -1,4 +1,4 @@
-package com.samir.paypaycodechallenge.models
+package com.samir.paypaycodechallenge.data.remote
 
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName

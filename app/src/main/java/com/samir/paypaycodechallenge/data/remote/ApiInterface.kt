@@ -1,7 +1,5 @@
-package com.samir.paypaycodechallenge.restapicall
+package com.samir.paypaycodechallenge.data.remote
 
-import com.samir.paypaycodechallenge.models.ApiCurrencyList
-import com.samir.paypaycodechallenge.models.ApiCurrencyRate
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

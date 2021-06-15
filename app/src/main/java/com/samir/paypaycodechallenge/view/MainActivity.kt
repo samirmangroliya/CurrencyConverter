@@ -1,4 +1,4 @@
-package com.samir.paypaycodechallenge
+package com.samir.paypaycodechallenge.view
 
 import android.os.Bundle
 import android.view.View
@@ -51,8 +51,8 @@ class MainActivity : AppCompatActivity() {
             showProgress(true)
             viewModelMain.getCurrencyList().observe(this, {
                 showProgress(false)
-                getCurrencyRates()
                 it?.let { apiCurrencyList ->
+                    getCurrencyRates()
                     if (apiCurrencyList.success) {
                         currencyList =
                             apiCurrencyList.jsonObjectCurrencies?.let { jsonObject ->
@@ -60,6 +60,10 @@ class MainActivity : AppCompatActivity() {
                                     jsonObject
                                 )
                             }
+
+                        if (!currencyList.isNullOrEmpty()) {
+                            viewModelMain.insertDataLocally(this, currencyList)
+                        }
                         showCurrencyList()
                     } else {
                         showAlert(apiCurrencyList.error?.info)
@@ -85,8 +89,9 @@ class MainActivity : AppCompatActivity() {
                         jsonObjectRate = apiCurrencyRate.jsonObjectQuotes
                         currencyRatesList =
                             it.jsonObjectQuotes?.let { jsonObject -> viewModelMain.currencyRatesToList(jsonObject) }
-                    } else {
-                        showAlert(apiCurrencyRate.error?.info)
+                        if (jsonObjectRate?.isJsonObject == true) {
+                            viewModelMain.insertDataRatesLocally(this, apiCurrencyRate.timestamp, jsonObjectRate.toString())
+                        }
                     }
                 }
             })

@@ -1,9 +1,7 @@
-package com.samir.paypaycodechallenge.restapicall
+package com.samir.paypaycodechallenge.data.remote
 
 import androidx.lifecycle.MutableLiveData
-import com.samir.paypaycodechallenge.globaldata.GlobalConstant
-import com.samir.paypaycodechallenge.models.ApiCurrencyList
-import com.samir.paypaycodechallenge.models.ApiCurrencyRate
+import com.samir.paypaycodechallenge.globaldata.ACCESS_KEY
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,7 +10,7 @@ object ApiHelper {
     fun getCurrencyList(): MutableLiveData<ApiCurrencyList?> {
         val mLiveDataCurrencyList: MutableLiveData<ApiCurrencyList?> = MutableLiveData<ApiCurrencyList?>()
         try {
-            val call = RetrofitClient.apiInterface.getCurrencyList(GlobalConstant.ACCESS_KEY)
+            val call = RetrofitClient.apiInterface.getCurrencyList(ACCESS_KEY)
             call?.enqueue(object : Callback<ApiCurrencyList?> {
                 override fun onResponse(call: Call<ApiCurrencyList?>, response: Response<ApiCurrencyList?>) {
                     response.body()?.let {
@@ -36,7 +34,7 @@ object ApiHelper {
     fun getCurrencyRates(): MutableLiveData<ApiCurrencyRate?> {
         val mLiveDataCurrencyRate: MutableLiveData<ApiCurrencyRate?> = MutableLiveData<ApiCurrencyRate?>()
         try {
-            val call = RetrofitClient.apiInterface.getCurrencyRates(GlobalConstant.ACCESS_KEY)
+            val call = RetrofitClient.apiInterface.getCurrencyRates(ACCESS_KEY)
             call?.enqueue(object : Callback<ApiCurrencyRate?> {
                 override fun onResponse(call: Call<ApiCurrencyRate?>, response: Response<ApiCurrencyRate?>) {
                     response.body()?.let {

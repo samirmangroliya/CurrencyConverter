@@ -3,6 +3,8 @@ buildscript {
     ext.kotlin_version = "1.5.10"
     ext.retrofit_version = '2.9.0'
     ext.log_interceptor_version = '4.9.1'
+    ext.room_version = "2.3.0"
+    ext.joda_time_version = "2.10.8"
 
     repositories {
         google()
