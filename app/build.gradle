@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+
 }
 
 android {
@@ -42,10 +44,24 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'com.google.truth:truth:0.43'
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
+    androidTestImplementation('androidx.test:runner:1.3.0')
+    androidTestImplementation('androidx.test:rules:1.3.0')
+
 
     // Retrofit:  Used for API call/https request
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$log_interceptor_version"
+
+    //Room
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    kapt "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
+    implementation "androidx.room:room-ktx:$room_version"
+
+    // Date
+    implementation "joda-time:joda-time:$joda_time_version"
 }

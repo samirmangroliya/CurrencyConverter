@@ -1,6 +1,6 @@
-package com.samir.paypaycodechallenge.restapicall
+package com.samir.paypaycodechallenge.data.remote
 
-import com.samir.paypaycodechallenge.globaldata.GlobalConstant
+import com.samir.paypaycodechallenge.globaldata.BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -14,7 +14,7 @@ object RetrofitClient {
 
         val okhttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
         Retrofit.Builder()
-            .baseUrl(GlobalConstant.BASE_URL)
+            .baseUrl(BASE_URL)
             .client(okhttpClient)
             .addConverterFactory(GsonConverterFactory.create())
     }

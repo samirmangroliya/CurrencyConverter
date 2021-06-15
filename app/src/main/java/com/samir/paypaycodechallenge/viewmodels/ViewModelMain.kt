@@ -1,15 +1,18 @@
 package com.samir.paypaycodechallenge.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
-import com.samir.paypaycodechallenge.models.ApiCurrencyList
-import com.samir.paypaycodechallenge.models.ApiCurrencyRate
+import com.samir.paypaycodechallenge.data.remote.ApiCurrencyList
+import com.samir.paypaycodechallenge.data.remote.ApiCurrencyRate
 import com.samir.paypaycodechallenge.models.Currency
 import com.samir.paypaycodechallenge.models.Quotes
-import com.samir.paypaycodechallenge.restapicall.ApiHelper
+import com.samir.paypaycodechallenge.repository.CurrencyRepository
+import com.samir.paypaycodechallenge.data.remote.ApiHelper
 
 internal class ViewModelMain : ViewModel() {
+
     fun getCurrencyList(): MutableLiveData<ApiCurrencyList?> {
         return ApiHelper.getCurrencyList()
     }
@@ -58,5 +61,17 @@ internal class ViewModelMain : ViewModel() {
             e.printStackTrace()
         }
         return currencyAbbrList
+    }
+
+    fun insertDataLocally(context:Context, currencyList: MutableList<Currency>?) {
+        val currencyRepo = CurrencyRepository(context)
+        if (currencyList != null) {
+            currencyRepo.insertData(currencyList)
+        }
+    }
+
+    fun insertDataRatesLocally(context: Context, timestamp: Long, jsonObjectRate: String) {
+        val currencyRepo = CurrencyRepository(context)
+        currencyRepo.insertRatesData(timestamp, jsonObjectRate)
     }
 }
