@@ -7,7 +7,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.samir.paypaycodechallenge.data.local.dao.CurrencyDao
 import com.samir.paypaycodechallenge.data.local.database.CurrencyDatabase
 import com.samir.paypaycodechallenge.data.local.entity.CurrencyEntity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.junit.After
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -36,7 +39,7 @@ class RoomDatabaseTest {
 
     @Test
     @Throws(Exception::class)
-    fun writeUserAndReadInList() {
+    fun writeUserAndReadInList() = runBlocking {
         val listOfCurrency = mutableListOf<CurrencyEntity>()
         val currencyEntityINR = CurrencyEntity("INR", "Indian Rupees")
         //val currencyEntityUSD = CurrencyEntity("USD", "US Dollar") //test for negative result
@@ -45,7 +48,25 @@ class RoomDatabaseTest {
         currencyDao.clearAll()
         currencyDao.insertAll(listOfCurrency)
 
-        val allCurrencies = currencyDao.allCurrency()
+        val allCurrencies = currencyDao.getAllCurrency().first()
         assertEquals("Currency insert database is failed...", allCurrencies[0], currencyEntityINR)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun deleteAll() = runBlocking {
+        val listOfCurrency = mutableListOf<CurrencyEntity>()
+
+        val currencyEntityINR = CurrencyEntity("INR", "Indian Rupees")
+        val currencyEntityUSD = CurrencyEntity("USD", "US Dollar")
+
+        listOfCurrency.add(currencyEntityINR)
+        listOfCurrency.add(currencyEntityUSD)
+        currencyDao.insertAll(listOfCurrency)
+
+        currencyDao.clearAll()
+
+        val allCurrency = currencyDao.getAllCurrency().first()
+        Assert.assertTrue(allCurrency.isEmpty())
     }
 }

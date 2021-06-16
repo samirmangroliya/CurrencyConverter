@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonObject
 import com.samir.paypaycodechallenge.R
+import com.samir.paypaycodechallenge.data.local.entity.CurrencyEntity
 import com.samir.paypaycodechallenge.globaldata.CurrencyUtil
-import com.samir.paypaycodechallenge.models.Currency
 
 class RatesAdapter(
-    private val selectedCurrency: Currency,
+    private val selectedCurrency: CurrencyEntity,
     private val amount: Double,
-    private val items: MutableList<Currency>,
+    private val items: MutableList<CurrencyEntity>,
     private val jsonObjectRate: JsonObject?
 ) :
     RecyclerView.Adapter<RatesAdapter.ViewHolder>() {
@@ -39,7 +39,7 @@ class RatesAdapter(
         private lateinit var tvName: TextView
         private lateinit var tvRate: TextView
 
-        fun bind(currency: Currency?) = with(itemView) {
+        fun bind(currency: CurrencyEntity?) = with(itemView) {
             tvName = itemView.findViewById(R.id.tvname)
             tvRate = itemView.findViewById(R.id.tvrate)
 

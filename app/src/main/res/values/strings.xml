@@ -4,4 +4,8 @@
 
     <string name="enter_amount">Enter Amount</string>
     <string name="get_rate">Get Rate</string>
+    <string name="failed_to_load_list">Failed to load Currency List</string>
+    <string name="failed_to_load_rate">Failed to load Currency Rate</string>
+    <string name="internet_error">Internet connection is not available</string>
+    <string name="enter_amount_error">Please Enter Amount</string>
 </resources>

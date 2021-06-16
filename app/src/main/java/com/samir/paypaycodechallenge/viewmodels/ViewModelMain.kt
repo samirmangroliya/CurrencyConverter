@@ -1,77 +1,62 @@
 package com.samir.paypaycodechallenge.viewmodels
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.JsonObject
-import com.samir.paypaycodechallenge.data.remote.ApiCurrencyList
-import com.samir.paypaycodechallenge.data.remote.ApiCurrencyRate
-import com.samir.paypaycodechallenge.models.Currency
-import com.samir.paypaycodechallenge.models.Quotes
+import androidx.lifecycle.asLiveData
+import androidx.work.*
+import com.samir.paypaycodechallenge.R
+import com.samir.paypaycodechallenge.data.local.entity.CurrencyEntity
+import com.samir.paypaycodechallenge.data.local.entity.CurrencyRateEntity
+import com.samir.paypaycodechallenge.data.remote.SyncDataWorker
+import com.samir.paypaycodechallenge.globaldata.SYNC_DATA_WORK_NAME
+import com.samir.paypaycodechallenge.globaldata.TAG_SYNC_DATA
+import com.samir.paypaycodechallenge.globaldata.isInternetAvailable
+import com.samir.paypaycodechallenge.globaldata.showToast
 import com.samir.paypaycodechallenge.repository.CurrencyRepository
-import com.samir.paypaycodechallenge.data.remote.ApiHelper
+import java.util.concurrent.TimeUnit
+
 
 internal class ViewModelMain : ViewModel() {
 
-    fun getCurrencyList(): MutableLiveData<ApiCurrencyList?> {
-        return ApiHelper.getCurrencyList()
-    }
+    private lateinit var workManager: WorkManager
+    private lateinit var savedWorkInfo: LiveData<List<WorkInfo>>
 
-    fun getCurrencyRates(): MutableLiveData<ApiCurrencyRate?> {
-        return ApiHelper.getCurrencyRates()
-    }
-
-    fun currencyListToList(jsonObject: JsonObject): MutableList<Currency>? {
-        try {
-            val currencyList = mutableListOf<Currency>()
-            for (key in jsonObject.keySet()) {
-                val value = jsonObject.get(key)
-                val currency = Currency(key, value.asString)
-                currencyList.add(currency)
-            }
-            return currencyList
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-    fun currencyRatesToList(jsonObject: JsonObject): MutableList<Quotes>? {
-        try {
-            val currencyRateList = mutableListOf<Quotes>()
-            for (key in jsonObject.keySet()) {
-                val value = jsonObject.get(key)
-                val currency = Quotes(key, value.asDouble)
-                currencyRateList.add(currency)
-            }
-            return currencyRateList
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
-    fun getCurrencyNameList(currencyList: MutableList<Currency>): MutableList<String> {
-        val currencyAbbrList = mutableListOf<String>()
-        try {
-            for (currency in currencyList) {
-                currencyAbbrList.add("${currency.abbr} - ${currency.name}")
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return currencyAbbrList
-    }
-
-    fun insertDataLocally(context:Context, currencyList: MutableList<Currency>?) {
+    fun getLocalCurrencyList(context: Context): LiveData<List<CurrencyEntity>>? {
         val currencyRepo = CurrencyRepository(context)
-        if (currencyList != null) {
-            currencyRepo.insertData(currencyList)
-        }
+        return currencyRepo.allCurrencyList?.asLiveData()
     }
 
-    fun insertDataRatesLocally(context: Context, timestamp: Long, jsonObjectRate: String) {
+    fun getLocalCurrencyRate(context: Context): LiveData<List<CurrencyRateEntity>>? {
         val currencyRepo = CurrencyRepository(context)
-        currencyRepo.insertRatesData(timestamp, jsonObjectRate)
+        return currencyRepo.allCurrencyRate?.asLiveData()
     }
+
+    fun fetchData(context: Context) {
+        if (!isInternetAvailable(context)) {
+            context.showToast(context.getString(R.string.internet_error))
+            return
+        }
+
+        workManager = WorkManager.getInstance(context)
+        savedWorkInfo = workManager.getWorkInfosByTagLiveData(TAG_SYNC_DATA)
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val periodicSyncDataWork = PeriodicWorkRequest.Builder(SyncDataWorker::class.java, 15, TimeUnit.MINUTES)
+            .addTag(TAG_SYNC_DATA)
+            .setConstraints(constraints)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, PeriodicWorkRequest.MIN_BACKOFF_MILLIS, TimeUnit.MILLISECONDS)
+            .build()
+        workManager.enqueueUniquePeriodicWork(
+            SYNC_DATA_WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            periodicSyncDataWork
+        )
+    }
+
+    fun getOutputWorkInfo(): LiveData<List<WorkInfo>> {
+        return savedWorkInfo
+    }
+
 }
