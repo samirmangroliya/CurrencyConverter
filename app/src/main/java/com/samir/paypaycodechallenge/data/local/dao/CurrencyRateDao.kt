@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.samir.paypaycodechallenge.data.local.entity.CurrencyRateEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CurrencyRateDao {
@@ -12,7 +13,7 @@ interface CurrencyRateDao {
     fun insertRate(currencyRateEntity: CurrencyRateEntity)
 
     @Query("SELECT * FROM CurrencyRate")
-    fun getRate(): List<CurrencyRateEntity>
+    fun getRate(): Flow<List<CurrencyRateEntity>>
 
     @Query("DELETE FROM CurrencyRate")
     fun clearAll()

@@ -3,7 +3,7 @@ package com.samir.paypaycodechallenge.globaldata
 import java.text.DecimalFormat
 
 class CurrencyUtil {
-    val decimalFormat: DecimalFormat = DecimalFormat("#.##")
+    private val decimalFormat: DecimalFormat = DecimalFormat("#.##")
     fun currencyConverter(currUSDRate: Double?, selectedUSDRate: Double?, amount: Double): Double {
         try {
             currUSDRate?.let { currRate ->

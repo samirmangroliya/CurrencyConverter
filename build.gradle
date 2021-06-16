@@ -5,6 +5,8 @@ buildscript {
     ext.log_interceptor_version = '4.9.1'
     ext.room_version = "2.3.0"
     ext.joda_time_version = "2.10.8"
+    ext.lifecycle_version = "2.3.1"
+    ext.workmanager_version = "2.1.0"
 
     repositories {
         google()
