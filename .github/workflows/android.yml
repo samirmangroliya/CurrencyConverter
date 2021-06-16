@@ -22,11 +22,6 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: Publish Unit Test Results
-      uses: ponicode/unit-testing-action@0.0.1-christmas
-      if: always()
-      with:
-       repoPath: ./
       
     - name: Generate APK File
       uses: actions/upload-artifact@v2.2.3
